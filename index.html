@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Project</title>
@@ -14,36 +14,49 @@
       import * as THREE from "../modules/three.module.js";
       import { OrbitControls } from "../modules/OrbitControls.js";
 
+      // keep track of time
       let clock = new THREE.Clock();
+      // used to rotate the textures a certain value
       let delta = 0;
 
+      // create a camera
       const camera = new THREE.PerspectiveCamera(
         75,
         window.innerWidth / window.innerHeight,
         1,
         1500
       );
+      // z position change back and front
       camera.position.z = 1000;
 
       const scene = new THREE.Scene();
-
+      // fog increses the volume the smoke
       scene.fog = new THREE.Fog(0xc0f0ff, 0.0015);
 
+      // Render section
       const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
+      // A light source positioned directly above the scene, with color fading from the sky color to the ground color.
       const light = new THREE.HemisphereLight(0xd6e6ff, 0xa38c08, 1);
       scene.add(light);
 
+      // orbit controls allow the camera to orbit around a target
       const controls = new OrbitControls(camera, renderer.domElement);
 
+      // texture
       const smokeTexture = new THREE.TextureLoader().load(
         "./textures/anim.gif"
       );
+      // default is linear
       smokeTexture.encoding = THREE.sRGBEncoding;
+
+      // A class for generating plane geometries. set size of the plane
       const smokeGeometry = new THREE.PlaneGeometry(300, 300);
+
+      // A material for non-shiny surfaces, pass object (there are more values)
       const smokeMaterial = new THREE.MeshLambertMaterial({
         map: smokeTexture,
         emissive: 0x222222,
@@ -51,16 +64,23 @@
         transparent: true,
       });
 
+      // arr of the textures
       let smokeParticles = [];
 
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 200; i++) {
+        // here we are creating a Mesh class used to representing triangular polygon mesh based objects
         let smokeElement = new THREE.Mesh(smokeGeometry, smokeMaterial);
+
+        // setting the scale x,y,z
         smokeElement.scale.set(2, 2, 2);
+
+        // setting x y z position random values
         smokeElement.position.set(
           Math.random() * 1000 - 500,
           Math.random() * 1000 - 500,
           Math.random() * 1000 - 100
         );
+        // rotate on z axis
         smokeElement.rotation.z = Math.random() * 360;
         scene.add(smokeElement);
         smokeParticles.push(smokeElement);
@@ -72,13 +92,19 @@
 
       function animate() {
         requestAnimationFrame(animate);
+
+        // amount of time passed since clock updated
         delta = clock.getDelta();
+
+        // rotatation of evey arr el by value delta * 0.12
         for (let i = 0; i < smokeParticles.length; i++) {
-          smokeParticles[i].rotation.z += delta * 0.12;
+          // sets the rotation speed of the textures
+          smokeParticles[i].rotation.z += delta * 0.03;
         }
         renderer.render(scene, camera);
       }
 
+      // handle resize of windos
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
