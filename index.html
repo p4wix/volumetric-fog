@@ -2,14 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Project</title>
+    <title>Volumetric Fog</title>
     <style>
       body {
         margin: 0;
       }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/style.css" />
   </head>
   <body>
+    <div class="wrapper">
+      <div class="wrapper__infoBox">
+        <h1 class="infoBox__header">Grafika komputerowa - Volumetric Fog</h1>
+        <p class="infoBox__desc">Paweł Biniak</p>
+      </div>
+    </div>
     <script type="module">
       import * as THREE from "../modules/three.module.js";
       import { OrbitControls } from "../modules/OrbitControls.js";
@@ -39,7 +52,7 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // A light source positioned directly above the scene, with color fading from the sky color to the ground color.
+      // A light source positioned directly above the scene, with color fading from the sky color to the ground color.light type
       const light = new THREE.HemisphereLight(0xd6e6ff, 0xa38c08, 1);
       scene.add(light);
 
